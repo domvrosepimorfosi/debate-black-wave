@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <title>Το μαύρο κύμα – Δομημένο Debate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #fdfbf7;
+      --card-bg: #ffffff;
+      --accent: #00897b;
+      --accent-soft: #e0f2f1;
+      --accent-alt: #0277bd;
+      --text-main: #263238;
+      --text-muted: #546e7a;
+      --border: #cfd8dc;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    header {
+      background: #ffffff;
+      padding: 0.8rem 1.5rem 0.9rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .header-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .site-logo {
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    header p {
+      margin: 0.2rem 0 0;
+      font-size: 0.96rem;
+      color: var(--text-muted);
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+    }
+
+    /* meta summary – μόνο στην εκτύπωση */
+    .meta-summary {
+      display: none;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    .meta-summary span strong {
+      color: var(--text-main);
+    }
+
+    .step-indicator {
+      margin-top: 0.35rem;
+      display: flex;
+      gap: 0.35rem;
+      justify-content: center;
+    }
+
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: transparent;
+    }
+
+    .step-dot.active {
+      background: var(--accent);
+    }
+
+    main {
+      max-width: 900px;
+      margin: 1.5rem auto 2.5rem;
+      padding: 0 1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.6rem 1.5rem 1.3rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: 1.3rem;
+    }
+
+    .hint {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .hint.small {
+      font-size: 0.88rem;
+    }
+
+    .hint-list {
+      margin: 0.6rem 0 0.2rem;
+      padding-left: 1.2rem;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .hint-list li {
+      margin-bottom: 0.25rem;
+    }
+
+    .cover-image {
+      width: 100%;
+      border-radius: 14px;
+      margin: 0.8rem 0;
+      max-height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .center-question {
+      text-align: center;
+      margin: 0.4rem 0;
+      font-size: 1.1rem;
+    }
+
+    .center-subtitle {
+      text-align: center;
+      max-width: 600px;
+      margin: 0.25rem auto 0.4rem;
+      color: var(--text-muted);
+      font-size: 0.96rem;
+    }
+
+    .story-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin: 0 0 0.8rem;
+      text-align: justify;
+    }
+
+    .story-text:last-of-type {
+      margin-bottom: 0.2rem;
+    }
+
+    .glossary-word {
+      color: #e65100;
+      font-weight: bold;
+      cursor: help;
+      text-decoration: underline dotted;
+      position: relative;
+    }
+
+    .glossary-word::after {
+      content: attr(data-def);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #37474f;
+      color: #fff;
+      padding: 0.35rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transition: opacity 0.18s ease-out;
+      z-index: 100;
+    }
+
+    .glossary-word:hover::after {
+      opacity: 1;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.55rem 1.3rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    button.secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    button.small {
+      padding: 0.35rem 0.9rem;
+      font-size: 0.85rem;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    /* meta inputs */
+    .meta-inputs-card {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem 1rem;
+      margin-top: 0.6rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+      background: #fafafa;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+      background: #ffffff;
+    }
+
+    /* grids & roles */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .role-box {
+      padding: 0.8rem 0.9rem;
+      border-radius: 12px;
+      border: 1px dashed #b0bec5;
+      background: #fafafa;
+    }
+
+    .role-box h3 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+    }
+
+    /* argument organiser */
+    .arg-box {
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      padding: 0.8rem 0.9rem;
+    }
+
+    .arg-box h3 {
+      margin: 0 0 0.3rem;
+      font-size: 1rem;
+    }
+
+    .arg-list {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .arg-item {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      padding: 0.6rem 0.7rem;
+    }
+
+    .arg-item-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+      color: var(--text-main);
+    }
+
+    .arg-item-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0.1rem 0 0.2rem;
+    }
+
+    .arg-item textarea {
+      font-size: 0.9rem;
+      min-height: 48px;
+      margin-bottom: 0.25rem;
+    }
+
+    .arg-add-btn {
+      margin-top: 0.5rem;
+    }
+
+    /* phrase bank */
+    .phrase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 0.6rem;
+    }
+
+    .phrase-block {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid #e0e0e0;
+    }
+
+    .phrase-block h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1rem;
+    }
+
+    .phrase-block ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      font-size: 0.95rem;
+    }
+
+    .phrase-block li {
+      margin-bottom: 0.25rem;
+    }
+
+    /* voting */
+    .vote-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.75rem;
+      margin: 0.6rem 0 0.4rem;
+    }
+
+    .vote-box {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.7rem;
+      background: #fafafa;
+      font-size: 0.95rem;
+    }
+
+    .vote-box strong {
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+
+    .vote-box small {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .bar-chart {
+      margin-top: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .bar-label {
+      min-width: 140px;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 14px;
+      border-radius: 999px;
+      background: #eceff1;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    /* timer */
+    .timer-container {
+      margin-top: 0.5rem;
+      padding: 0.8rem 0.9rem;
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+      background: #fafafa;
+    }
+
+    .timer-container h3 {
+      text-align: center;
+      margin: 0 0 0.4rem;
+    }
+
+    .timer-display {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 0.4rem 0 0.6rem;
+      color: var(--text-main);
+    }
+
+    .inline-inputs {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .inline-inputs input {
+      width: 70px;
+    }
+
+    /* scenarios */
+    details.scenario {
+      margin-top: 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.7rem;
+      background: #fbfbfb;
+    }
+
+    details.scenario[open] {
+      background: #fffde7;
+      border-color: #fff9c4;
+    }
+
+    details.scenario summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    details.scenario p {
+      font-size: 0.95rem;
+      margin: 0.4rem 0;
+    }
+
+    /* rubric */
+    .rubric-table {
+      margin-top: 0.8rem;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .rubric-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px dashed #ddd;
+      align-items: center;
+    }
+
+    .rubric-header {
+      font-weight: 600;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 6px;
+    }
+
+    .rubric-input {
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .rubric-col-label {
+      text-align: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    .rubric-col-label.team-a {
+      background: #e0f2f1;
+      color: #00695c;
+    }
+
+    .rubric-col-label.team-b {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    /* footer */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid #e0e0e0;
+      background: #ffffff;
+    }
+
+    .no-print {}
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 0.8rem 0.9rem 0.9rem;
+      }
+      .title-row {
+        flex-direction: column;
+      }
+      .site-logo {
+        height: 52px;
+      }
+      header h1 {
+        font-size: 1.35rem;
+      }
+      .card {
+        padding: 1.3rem 1.1rem 1.1rem;
+      }
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .no-print { display: none !important; }
+      .meta-summary { display: flex; }
+      header {
+        position: static;
+        box-shadow: none;
+        border-bottom: 1px solid #ddd;
+      }
+      main {
+        margin: 0;
+        padding: 0.5rem 1rem;
+      }
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        border-radius: 0;
+        page-break-inside: avoid;
+      }
+      .step {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-row">
+      <img src="greek logo.png" alt="Λογότυπο" class="site-logo">
+      <div>
+        <h1>Το μαύρο κύμα</h1>
+        <p class="subtitle">Πετρέλαιο στη θάλασσα: Ανάπτυξη vs Προστασία του περιβάλλοντος</p>
+      </div>
+    </div>
+
+    <!-- Εμφανίζεται μόνο στην εκτύπωση -->
+    <div class="meta-summary">
+      <span><strong>Ομάδα:</strong> <span id="meta-summary-group">__________</span></span>
+      <span><strong>Τάξη:</strong> <span id="meta-summary-class">__________</span></span>
+      <span><strong>Ημερομηνία:</strong> <span id="meta-summary-date">____-__-__</span></span>
+    </div>
+
+    <div class="step-indicator no-print" id="stepIndicator"></div>
+  </div>
+</header>
+
+<main>
+  <!-- Βήμα 1: Στοιχεία Ομάδας -->
+  <section class="card step active">
+    <h2>Βήμα 1: Στοιχεία Ομάδας</h2>
+    <p class="hint">
+      Συμπληρώστε τα στοιχεία της ομάδας σας πριν ξεκινήσετε το debate. Στην εκτύπωση θα εμφανιστούν
+      και εδώ και στο επάνω μέρος της σελίδας.
+    </p>
+
+    <div class="meta-inputs-card">
+      <div>
+        <label>Όνομα Ομάδας / Τμήμα:</label>
+        <input type="text" id="meta-group" placeholder="π.χ. Οι Γλάροι - Α1">
+      </div>
+      <div>
+        <label>Ημερομηνία:</label>
+        <input type="date" id="meta-date">
+      </div>
+      <div>
+        <label>Τάξη / Μάθημα:</label>
+        <input type="text" id="meta-class" placeholder="π.χ. Α΄ Γυμνασίου - Νεοελληνική Λογοτεχνία">
+      </div>
+    </div>
+
+    <div class="btn-row no-print">
+      <span></span>
+      <button onclick="nextStep()">Συνέχεια ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 2: Δίλημμα -->
+  <section class="card step">
+    <h2>Βήμα 2: Το Δίλημμα της Ρύπανσης</h2>
+
+    <div style="text-align:center;">
+      <img src="kenga.png" alt="Η Κενγκά στο μαύρο κύμα" class="cover-image">
+    </div>
+
+    <h3 class="center-question">Ποιος φταίει περισσότερο για το «μαύρο κύμα» στη θάλασσα;</h3>
+    <p class="center-subtitle">
+      Μια δραστηριότητα debate βασισμένη στο βιβλίο του Luis Sepúlveda
+      «Η ιστορία του γάτου που έμαθε σ’ έναν γλάρο να πετάει».
+    </p>
+
+    <p class="hint small">
+      Πριν διαβάσετε το απόσπασμα, μπορείτε να μαντέψετε: θα κατηγορήσετε περισσότερο τις εταιρείες,
+      το κράτος ή όλους μας;
+    </p>
+
+    <div class="btn-row no-print" style="justify-content:center;">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Διαβάστε το Απόσπασμα ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 3: Κείμενο – Μέρος Α -->
+  <section class="card step">
+    <h2>Βήμα 3: Το κείμενο – Μέρος Α</h2>
+    <p class="hint">
+      Πέρνα το ποντίκι πάνω από τις πορτοκαλί λέξεις για να δεις μια απλή εξήγηση (για μαθητές Α΄ Γυμνασίου).
+    </p>
+
+    <p class="story-text">
+      Η Κενγκά άνοιξε τις φτερούγες για να πετάξει, αλλά το κύμα ήταν πιο γρήγορο και την πήρε από κάτω.
+      Όταν ξαναβγήκε στην επιφάνεια, το φως της μέρας είχε χαθεί, κι όταν κούνησε δυνατά το κεφάλι,
+      κατάλαβε πως η κατάρα των θαλασσών την είχε τυφλώσει.
+    </p>
+
+    <p class="story-text">
+      Η Κενγκά με τ' ασημιά φτερά βούτηξε πολλές φορές το κεφάλι της στο νερό, ώσπου κάποιες ακτίνες φως
+      έφτασαν στις κόρες των ματιών της που 'χαν σκεπαστεί με πετρέλαιο. Η
+      <span class="glossary-word" data-def="Πολύ πυκνή και παχιά ουσία που ρέει δύσκολα, όχι σαν νερό.">παχύρρευστη</span>
+      <span class="glossary-word" data-def="Μικρή λερωμένη περιοχή στην επιφάνεια της θάλασσας, εδώ από πετρέλαιο.">κηλίδα</span>,
+      η μαύρη μάστιγα, της είχε κολλήσει τα φτερά στο σώμα, κι η Κενγκά έπιασε να κουνάει τα πόδια,
+      με την ελπίδα να κολυμπήσει γρήγορα και να φύγει μακριά απ' το μαύρο κύμα.
+    </p>
+
+    <p class="story-text">
+      Με όλους τους μυς της πιασμένους από την προσπάθεια, κατάφερε κάποτε να φτάσει στο τέλος της
+      πετρελαιοκηλίδας και να 'ρθει σ' επαφή με το καθαρό νερό.
+    </p>
+
+    <p class="story-text">
+      Όταν, βουτώντας το κεφάλι στο νερό κι ανοιγοκλείνοντας συνέχεια τα μάτια, κατάφερε να τα καθαρίσει,
+      σήκωσε το κεφάλι και κοίταξε τον ουρανό· δεν είδε παρά κάτι σύννεφα ανάμεσα στη θάλασσα και στην
+      απεραντοσύνη του ουράνιου θόλου. Ήδη οι συντρόφισσές της απ’ το σμήνος του Φάρου της Κόκκινης Άμμου
+      πρέπει να ’χαν πετάξει μακριά — πολύ μακριά.
+    </p>
+
+    <p class="story-text">
+      Έτσι ήταν ο νόμος. Είχε δει κι η ίδια άλλους γλάρους να μολύνονται από το θανάσιμο μαύρο κύμα, κι όσο
+      δυνατή κι αν ήταν η λαχτάρα της να κατέβει για να βοηθήσει, είχε αναγκαστεί ν’ απομακρυνθεί,
+      υπακούοντας στο νόμο που απαγορεύει την παρουσία στο θάνατο των συντρόφων.
+    </p>
+
+    <p class="story-text">
+      Με τα φτερά τους ακίνητα, κολλημένα στο σώμα τους, οι γλάροι αποτελούσαν εύκολη λεία για τα μεγάλα ψάρια,
+      ή πέθαιναν αργά, από ασφυξία, καθώς το πετρέλαιο
+      <span class="glossary-word" data-def="Έκλεινε τελείως, δεν άφηνε τίποτα να περάσει.">έφραζε</span>
+      όλους τους πόρους.
+    </p>
+
+    <p class="story-text">
+      Αυτό το τέλος την περίμενε, κι η Κενγκά ευχήθηκε να την κατάπιναν αμέσως τα σαγόνια κάποιου
+      <span class="glossary-word" data-def="Πολύ μεγάλο ζώο της θάλασσας, σαν φάλαινα.">κήτους</span>.
+    </p>
+
+    <p class="story-text">
+      Η μαύρη <span class="glossary-word" data-def="Μικρή λερωμένη περιοχή στην επιφάνεια της θάλασσας, εδώ από πετρέλαιο.">κηλίδα</span>.
+      Η μαύρη μάστιγα. Περιμένοντας το τέλος της, η Κενγκά έπιασε να καταριέται τους ανθρώπους.
+    </p>
+
+    <p class="story-text">
+      «Όχι όμως όλους… Να μην είμαι και άδικη»,
+      <span class="glossary-word" data-def="Έβγαλε τη χαρακτηριστική φωνή του γλάρου, σαν δυνατό κάλεσμα.">έκρωξε</span>
+      αδύναμα.
+    </p>
+
+    <p class="story-text">
+      Πολλές φορές, από ψηλά, είδε πώς κάτι μεγάλα πετρελαιοφόρα
+      <span class="glossary-word" data-def="Εκμεταλλεύονταν την κατάσταση για να κερδίσουν κάτι.">επωφελούνταν</span>
+      τις μέρες που ’χε στεριανή ομίχλη για να βγουν στη θάλασσα και να πλύνουν τις δεξαμενές τους.
+      Σκόρπιζαν στη θάλασσα χιλιάδες λίτρα από μια ουσία
+      <span class="glossary-word" data-def="Πολύ πυκνή και παχιά ουσία που ρέει δύσκολα, όχι σαν νερό.">παχύρρευστη</span>
+      και μολυσματική, που επέπλεε στο κύμα. Είδε όμως κι άλλες φορές που κάτι μικρά πλεούμενα
+      πλεύριζαν τα πετρελαιοφόρα κι απαιτούσαν απ’ αυτά ν’ αδειάσουν τις δεξαμενές τους. Δυστυχώς, όμως,
+      αυτά τα πλεούμενα, όπου κυμάτιζε η σημαία με τα χρώματα της ίριδος, δεν έφταναν πάντα εγκαίρως
+      για ν’ αποτρέψουν τη δηλητηρίαση των θαλασσών.
+    </p>
+
+    <p class="story-text">
+      Η Κενγκά πέρασε τις πιο βασανιστικές ώρες της ζωής της καθισμένη πάνω στο νερό, με το τρομοκρατημένο
+      της μυαλό να φαντάζεται τον πιο φριχτό θάνατο· χειρότερο απ’ το να την κατασπαράξει ένα ψάρι,
+      χειρότερο ακόμα κι απ’ το να υποφέρει την αγωνία της ασφυξίας, ήταν το να πεθάνει από την πείνα.
+    </p>
+
+    <p class="story-text">
+      Μπροστά στην εφιαλτική προοπτική ενός αργού θανάτου, κούνησε το σώμα της και διαπίστωσε με έκπληξη
+      πως το πετρέλαιο δεν είχε πειράξει τις φτερούγες ως τη ρίζα τους. Μπορεί τα πούπουλά τους να ’χαν
+      ποτίσει απ’ αυτή την
+      <span class="glossary-word" data-def="Πολύ πυκνή και παχιά ουσία που ρέει δύσκολα, όχι σαν νερό.">παχύρρευστη</span>
+      ουσία, τουλάχιστον, όμως, μπορούσε να τις ανοίξει.
+    </p>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Κείμενο – Μέρος Β ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 4: Κείμενο – Μέρος Β -->
+  <section class="card step">
+    <h2>Βήμα 4: Το κείμενο – Μέρος Β</h2>
+    <p class="hint">
+      Αν δεν καταλαβαίνεις μια λέξη, προσπάθησε πρώτα να μαντέψεις από τα συμφραζόμενα
+      και μετά δες την εξήγηση με hover. Έτσι δυναμώνει η αναγνωστική σου ικανότητα.
+    </p>
+
+    <p class="story-text">
+      «Μπορεί και να ’χω μια ελπίδα να βγω από δω»,
+      <span class="glossary-word" data-def="Έβγαλε τη χαρακτηριστική φωνή του γλάρου, σαν δυνατό κάλεσμα.">έκρωξε</span>
+      η Κενγκά, «εκεί ίσως, αν πετάξω ψηλά, πολύ ψηλά, ο ήλιος να λιώσει την κατάρα που ’χει κολλήσει
+      στα φτερά μου».
+    </p>
+
+    <p class="story-text">
+      Θυμήθηκε μια ιστορία που της είχε διηγηθεί μια γριά συντρόφισσα απ’ τα
+      <span class="glossary-word" data-def="Ομάδα νησιών στη Βόρεια Θάλασσα, κοντά στη Γερμανία και την Ολλανδία.">Φρισικά Νησιά</span>:
+      πως ήταν κάποτε ένας άνθρωπος, που τον έλεγαν Ίκαρο, κι αυτός, που λαχταρούσε να πετάξει,
+      πήρε φτερά αετού και τ’ άλειψε με κερί για να τα κολλήσει και να φτιάξει φτερούγες,
+      και πέταξε ψηλά κι έφτασε κοντά στον ήλιο, κι η ζέστη του ήλιου έλιωσε το κερί,
+      κι ο Ίκαρος έπεσε.
+    </p>
+
+    <p class="story-text">
+      Η Κενγκά χτύπησε τις φτερούγες, μάζεψε τα πόδια, σηκώθηκε δυο πόντους κι έπεσε με τα μούτρα στο νερό.
+      Πριν δοκιμάσει άλλη μια φορά, βούτηξε ξανά και κούνησε τις φτερούγες κάτω απ’ το νερό.
+      Αυτή τη φορά, σηκώθηκε πάνω από ένα μέτρο, πριν ξαναπέσει.
+    </p>
+
+    <p class="story-text">
+      Το καταραμένο το πετρέλαιο είχε ποτίσει τα πούπουλα της ουράς, κι η Κενγκά δεν μπορούσε να
+      <span class="glossary-word" data-def="Ελέγχει, κατευθύνει, «κάνει κουμάντο».">κουμαντάρει</span>
+      το ανέβασμα. Ξαναβούτηξε κι έπιασε να καθαρίζει με το ράμφος το στρώμα της βρομιάς που ’χε σκεπάσει
+      την ουρά της. Πονούσε που ξερίζωνε τα φτερά της, αλλά, στο τέλος, η ουρά της ήταν πολύ καθαρότερη.
+    </p>
+
+    <p class="story-text">
+      Με την πέμπτη προσπάθεια, η Κενγκά κατόρθωσε να πετάξει.
+    </p>
+
+    <p class="story-text">
+      Φτεροκοπούσε απεγνωσμένα, αλλά το βάρος του πετρελαίου δεν την άφηνε. Λίγο να κουραζόταν,
+      και θα ’πεφτε
+      <span class="glossary-word" data-def="Κατευθείαν και απότομα, με όλο το σώμα, με τα μούτρα.">σούμπιτη</span>.
+      Ευτυχώς, δεν την είχαν πάρει τα χρόνια, και οι μύες της σήκωναν εύκολα το ζόρι.
+    </p>
+
+    <p class="story-text">
+      Πέταξε πολύ ψηλά. Χωρίς να σταματήσει το φτερούγισμα, κοίταξε κάτω κι είδε τη λεπτή, άσπρη γραμμή της ακτής.
+      Είδε και κάτι καράβια, που ήταν σαν κουκκίδες σε γαλάζιο ύφασμα. Πέταξε πιο ψηλά, αλλά ο ήλιος
+      δεν της έκανε το χατίρι. Ή οι ακτίνες του ήταν πολύ αδύναμες ή το στρώμα του πετρελαίου ήταν πολύ παχύ.
+    </p>
+
+    <p class="story-text">
+      Η Κενγκά κατάλαβε πως δε θα ’χε για πολύ ακόμα τη δύναμη να φτεροκοπάει, κι έψαξε να βρει ένα μέρος
+      στην ενδοχώρα για να κατέβει, ακολουθώντας την πράσινη και φιδωτή γραμμή του
+      <span class="glossary-word" data-def="Μεγάλος ποταμός στη Γερμανία που περνά και από το Αμβούργο.">Έλβα</span>.
+    </p>
+
+    <p class="story-text">
+      Το φτερούγισμά της γινόταν όλο και πιο βαρύ, όλο και πιο αργό. Έχανε δυνάμεις. Έπεφτε.
+    </p>
+
+    <p class="story-text">
+      Σε μιαν απέλπιδα προσπάθεια να ξανακερδίσει ύψος, έκλεισε τα μάτια και φτερούγισε με όσες δυνάμεις
+      τής είχαν απομείνει. Δεν κατάλαβε πόση ώρα πέταξε με τα μάτια κλειστά, όταν όμως τα άνοιξε,
+      πετούσε πάνω από έναν ψηλό πύργο μ’ έναν χρυσαφένιο
+      <span class="glossary-word" data-def="Αντικείμενο σε μια στέγη που γυρίζει και δείχνει από πού φυσάει ο άνεμος.">ανεμοδείκτη</span>.
+    </p>
+
+    <p class="story-text">
+      «O Άγιος Μιχαήλ!»,
+      <span class="glossary-word" data-def="Έβγαλε τη χαρακτηριστική φωνή του γλάρου, σαν δυνατό κάλεσμα.">έκρωξε</span>,
+      αναγνωρίζοντας το καμπαναριό της
+      <span class="glossary-word" data-def="Που ανήκει ή σχετίζεται με την πόλη Αμβούργο στη Γερμανία.">αμβουργιανής</span>
+      εκκλησίας.
+    </p>
+
+    <p class="story-text">
+      Τις φτερούγες της δεν μπορούσε πια ούτε να τις κουνήσει.
+    </p>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Η Σύγκρουση ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 5: Η Σύγκρουση -->
+  <section class="card step">
+    <h2>Βήμα 5: Η Σύγκρουση</h2>
+    <p class="hint">
+      Στο κείμενο βλέπουμε μια μεγάλη σύγκρουση: ανάμεσα στην ανθρώπινη δραστηριότητα
+      (πλοία, πετρέλαιο, εμπόριο) και στη ζωή της θάλασσας. Ποια «φωνή» θα υπερασπιστεί η ομάδα σας;
+    </p>
+
+    <div class="grid-2">
+      <div class="role-box">
+        <h3>Πλευρά Α – Οικονομία & Μεταφορές</h3>
+        <ul class="hint-list">
+          <li>Πλοιοκτήτες μεγάλων πετρελαιοφόρων.</li>
+          <li>Εργαζόμενοι στα καράβια και στα λιμάνια.</li>
+          <li>Εταιρείες που μεταφέρουν προϊόντα σε όλο τον κόσμο.</li>
+          <li>Επιχείρημα-κλειδί: «Χωρίς πλοία και πετρέλαιο δεν κινείται η οικονομία».</li>
+        </ul>
+      </div>
+
+      <div class="role-box">
+        <h3>Πλευρά Β – Περιβάλλον & Θαλάσσια Ζωή</h3>
+        <ul class="hint-list">
+          <li>Γλάροι, ψάρια, θαλάσσιες χελώνες, όλα τα ζώα της θάλασσας.</li>
+          <li>Κάτοικοι που ζουν από τη θάλασσα (ψαράδες, τουρισμός κτλ.).</li>
+          <li>Μελλοντικές γενιές που θα κληρονομήσουν τη Γη.</li>
+          <li>Επιχείρημα-κλειδί: «Καμία οικονομία δεν αξίζει αν καταστρέφει τη ζωή».</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="hint small">
+      Σκεφτείτε: μετά την ανάγνωση, ποια πλευρά σας φαίνεται πιο δίκαιη; Τι θα έλεγε η Κενγκά;
+    </p>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Αρχική Ψηφοφορία ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 6: Αρχική Ψηφοφορία -->
+  <section class="card step">
+    <h2>Βήμα 6: Αρχική Ψηφοφορία</h2>
+    <p class="hint">
+      Πριν ξεκινήσει το debate, ψηφίστε: ποιος έχει τη μεγαλύτερη ευθύνη για το «μαύρο κύμα»;
+      Ο/Η εκπαιδευτικός μπορεί να συμπληρώσει τα νούμερα.
+    </p>
+
+    <div class="vote-inputs">
+      <div class="vote-box">
+        <strong>Μεγάλες εταιρείες & πλοιοκτήτες</strong>
+        <small>(καράβια, πετρέλαιο, κέρδος)</small>
+        <input type="number" id="pre-a" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Κράτος & νόμοι</strong>
+        <small>(έλεγχοι, πρόστιμα, κανόνες)</small>
+        <input type="number" id="pre-b" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Όλοι μας / Καταναλωτές</strong>
+        <small>(όσοι χρησιμοποιούμε προϊόντα & μεταφορές)</small>
+        <input type="number" id="pre-c" min="0" value="0">
+      </div>
+    </div>
+
+    <button class="small no-print" onclick="calcPreVote()">Υπολογισμός & Γράφημα</button>
+    <div id="pre-results" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+    <div id="pre-chart" class="bar-chart"></div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Ομάδες & Ρόλοι ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 7: Ομάδες & Ρόλοι (με κριτές) -->
+  <section class="card step">
+    <h2>Βήμα 7: Ομάδες & Ρόλοι</h2>
+    <p class="hint">
+      Χωριστείτε σε δύο βασικές ομάδες για το debate και ορίστε 2–3 μαθητές/τριες ως
+      <strong>Κριτές</strong>. Οι κριτές ακούν προσεκτικά και στο τέλος αποφασίζουν ποια επιχειρήματα
+      ήταν πιο πειστικά και πιο δίκαια.
+    </p>
+
+    <div class="grid-2">
+      <div class="role-box">
+        <h3>Ομάδα Α – Οικονομία & Μεταφορές</h3>
+        <ul class="hint-list">
+          <li>Πλοιοκτήτες μεγάλων πετρελαιοφόρων.</li>
+          <li>Εργαζόμενοι στα καράβια και στα λιμάνια.</li>
+          <li>Εταιρείες που μεταφέρουν προϊόντα σε όλο τον κόσμο.</li>
+          <li>Σκεφτείτε: τι θα πουν για τις θέσεις εργασίας και τα χρήματα;</li>
+        </ul>
+      </div>
+
+      <div class="role-box">
+        <h3>Ομάδα Β – Περιβάλλον & Κοινωνία</h3>
+        <ul class="hint-list">
+          <li>Γλάροι, θαλάσσια ζώα, η ίδια η Κενγκά.</li>
+          <li>Ψαράδες, κάτοικοι της ακτής, τουριστικές περιοχές.</li>
+          <li>Επιστήμονες και περιβαλλοντικές οργανώσεις.</li>
+          <li>Σκεφτείτε: τι θα πουν για τη ζωή στη θάλασσα και την υγεία;</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-box" style="margin-top:1rem;">
+      <h3>Κριτές / Επιτροπή Debate</h3>
+      <ul class="hint-list">
+        <li>2–3 μαθητές/τριες κάθονται στο κέντρο ή στην άκρη και δεν ανήκουν σε καμία ομάδα.</li>
+        <li>Κρατούν σημειώσεις για:
+          <ul>
+            <li>πόσο καθαρά μίλησε κάθε ομιλητής,</li>
+            <li>αν χρησιμοποίησε παραδείγματα από το κείμενο της Κενγκά,</li>
+            <li>αν σεβάστηκε τους άλλους όταν διαφώνησε,</li>
+            <li>ποια επιχειρήματα τους φάνηκαν πιο πειστικά.</li>
+          </ul>
+        </li>
+        <li>Στο τέλος ανακοινώνουν:
+          <ul>
+            <li>ποια πλευρά τους έπεισε περισσότερο,</li>
+            <li>1–2 σημεία που θα μπορούσαν να γίνουν καλύτερα στο επόμενο debate.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Οργάνωση Επιχειρημάτων & Φράσεις ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 8: Οργάνωση Επιχειρημάτων & Φράσεις -->
+  <section class="card step">
+    <h2>Βήμα 8: Οργάνωση Επιχειρημάτων & Τράπεζα Φράσεων</h2>
+    <p class="hint">
+      Κάθε επιχείρημα καλό είναι να έχει τρία μέρη:
+      <strong>1) Θέση</strong>, <strong>2) Γιατί το λέμε</strong>, <strong>3) Παράδειγμα</strong>.
+      Χρησιμοποιήστε τα κουμπιά «+ Νέο επιχείρημα» για να προσθέσετε όσα χρειάζεστε.
+    </p>
+
+    <div class="grid-2">
+      <div class="arg-box">
+        <h3>Επιχειρήματα Ομάδας Α – Οικονομία & Μεταφορές</h3>
+        <p class="hint small">
+          Προσπαθήστε να δείξετε γιατί οι μεταφορές και το πετρέλαιο είναι σημαντικά για τους ανθρώπους.
+          Μην ξεχνάτε όμως να απαντάτε και στην κριτική της άλλης πλευράς.
+        </p>
+        <div id="argsA" class="arg-list">
+          <!-- γεμίζει με JS -->
+        </div>
+        <button type="button" class="small secondary arg-add-btn no-print" onclick="addArgument('A')">
+          + Νέο επιχείρημα (Ομάδα Α)
+        </button>
+      </div>
+
+      <div class="arg-box">
+        <h3>Επιχειρήματα Ομάδας Β – Περιβάλλον & Θαλάσσια Ζωή</h3>
+        <p class="hint small">
+          Προσπαθήστε να δείξετε γιατί η προστασία της θάλασσας και των ζώων είναι πιο σημαντική
+          από το κέρδος. Χρησιμοποιήστε εικόνες από την ιστορία της Κενγκά.
+        </p>
+        <div id="argsB" class="arg-list">
+          <!-- γεμίζει με JS -->
+        </div>
+        <button type="button" class="small secondary arg-add-btn no-print" onclick="addArgument('B')">
+          + Νέο επιχείρημα (Ομάδα Β)
+        </button>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.1rem;">Έτοιμες φράσεις για το debate</h3>
+
+    <div class="phrase-grid">
+      <div class="phrase-block">
+        <h3>1. Ξεκινώ την άποψή μου</h3>
+        <ul>
+          <li>«Κατά τη γνώμη μου…»</li>
+          <li>«Πιστεύω ότι…»</li>
+          <li>«Από τη δική μας πλευρά θεωρούμε πως…»</li>
+        </ul>
+      </div>
+
+      <div class="phrase-block">
+        <h3>2. Συνδέω με το κείμενο</h3>
+        <ul>
+          <li>«Στο κείμενο βλέπουμε ότι η Κενγκά…»</li>
+          <li>«Το “μαύρο κύμα” μας δείχνει πως…»</li>
+          <li>«Το παράδειγμα με τα πετρελαιοφόρα αποδεικνύει ότι…»</li>
+        </ul>
+      </div>
+
+      <div class="phrase-block">
+        <h3>3. Συμφωνώ / Διαφωνώ ευγενικά</h3>
+        <ul>
+          <li>«Σε αυτό το σημείο συμφωνώ, γιατί…»</li>
+          <li>«Σε ένα μέρος συμφωνώ, όμως θα ήθελα να προσθέσω ότι…»</li>
+          <li>«Θα μου επιτρέψετε να διαφωνήσω, επειδή…»</li>
+          <li>«Δεν είμαι σίγουρος/η ότι αυτό ισχύει, γιατί…»</li>
+        </ul>
+      </div>
+
+      <div class="phrase-block">
+        <h3>4. Ζητώ διευκρίνιση</h3>
+        <ul>
+          <li>«Μπορείτε να εξηγήσετε λίγο περισσότερο τι εννοείτε;»</li>
+          <li>«Θα μπορούσατε να δώσετε ένα παράδειγμα;»</li>
+          <li>«Αν σας κατάλαβα σωστά, λέτε ότι…;»</li>
+        </ul>
+      </div>
+
+      <div class="phrase-block">
+        <h3>5. Μιλάω για ευθύνη</h3>
+        <ul>
+          <li>«Οι άνθρωποι έχουν ευθύνη να προστατεύουν τη θάλασσα, γιατί…»</li>
+          <li>«Οι εταιρείες οφείλουν να προσέχουν τα καύσιμα και τα απόβλητά τους, ώστε…»</li>
+          <li>«Το κράτος πρέπει να ελέγχει και να τιμωρεί όσους ρυπαίνουν, για να…»</li>
+        </ul>
+      </div>
+
+      <div class="phrase-block">
+        <h3>6. Κλείνω το επιχείρημά μου</h3>
+        <ul>
+          <li>«Γι’ αυτό πιστεύω ότι…»</li>
+          <li>«Συμπερασματικά, είναι πιο δίκαιο να…»</li>
+          <li>«Άρα, αν θέλουμε να προστατέψουμε τη θάλασσα, πρέπει…»</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Εκτύπωση επιχειρημάτων -->
+    <div class="btn-row no-print" style="margin-top:1rem;">
+      <button class="small secondary" onclick="printArguments()">🖨️ Εκτύπωση Επιχειρημάτων</button>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Σύγχρονα Σενάρια ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 9: Σύγχρονα Σενάρια -->
+  <section class="card step">
+    <h2>Βήμα 9: Σύγχρονα Σενάρια</h2>
+    <p class="hint">
+      Συνδέστε το «μαύρο κύμα» με σημερινές ή πιθανές καταστάσεις. Γράψτε τι θα έλεγε κάθε πλευρά.
+      Οι κριτές μπορούν εδώ να κρατήσουν έξτρα σημειώσεις.
+    </p>
+
+    <details class="scenario">
+      <summary>🌊 Σενάριο 1: Νέα πετρελαιοκηλίδα κοντά σε νησί</summary>
+      <p>
+        Ένα φορτηγό πλοίο παθαίνει ατύχημα και διαρρέει πετρέλαιο κοντά σε τουριστικό νησί.
+        Οι κάτοικοι ανησυχούν για τη θάλασσα και τον τουρισμό.
+      </p>
+      <div class="grid-2">
+        <textarea placeholder="Ομάδα Α – Τι λένε οι εταιρείες και οι εργαζόμενοι;"></textarea>
+        <textarea placeholder="Ομάδα Β – Τι λένε οι κάτοικοι, οι ψαράδες και τα ζώα της θάλασσας;"></textarea>
+      </div>
+    </details>
+
+    <details class="scenario">
+      <summary>🚢 Σενάριο 2: Παλιά καράβια χωρίς έλεγχο</summary>
+      <p>
+        Κάποιες εταιρείες συνεχίζουν να χρησιμοποιούν παλιά καράβια, γιατί είναι πιο φθηνά,
+        παρόλο που κινδυνεύουν να βουλιάξουν και να μολύνουν τη θάλασσα.
+      </p>
+      <div class="grid-2">
+        <textarea placeholder="Ομάδα Α – Επιχειρήματα υπέρ της χρήσης των παλιών καραβιών."></textarea>
+        <textarea placeholder="Ομάδα Β – Επιχειρήματα υπέρ των αυστηρών ελέγχων και της προστασίας."></textarea>
+      </div>
+    </details>
+
+    <details class="scenario">
+      <summary>🛒 Σενάριο 3: Οι επιλογές των καταναλωτών</summary>
+      <p>
+        Οι άνθρωποι θέλουν φθηνά προϊόντα που έρχονται από μακριά με πλοία.
+        Αν πλήρωναν λίγο παραπάνω για πιο «καθαρές» μεταφορές, ίσως να μειωνόταν η ρύπανση.
+      </p>
+      <div class="grid-2">
+        <textarea placeholder="Ομάδα Α – Επιχειρήματα υπέρ των φθηνών προϊόντων."></textarea>
+        <textarea placeholder="Ομάδα Β – Επιχειρήματα υπέρ των πιο καθαρών αλλά ακριβότερων λύσεων."></textarea>
+      </div>
+    </details>
+
+    <!-- Εκτύπωση σεναρίων -->
+    <div class="btn-row no-print" style="margin-top:1rem;">
+      <button class="small secondary" onclick="printScenarios()">🖨️ Εκτύπωση Σεναρίων</button>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <button onclick="nextStep()">Debate, Χρονόμετρο & Τελική Ψηφοφορία ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 10: Debate, Χρονόμετρο, Rubric & Τελική Ψηφοφορία -->
+  <section class="card step">
+    <h2>Βήμα 10: Debate, Χρονόμετρο, Rubric & Τελική Ψηφοφορία</h2>
+
+    <div class="timer-container no-print">
+      <h3>⏱️ Χρονόμετρο Ομιλητή</h3>
+      <div class="inline-inputs">
+        <label>Λεπτά:</label>
+        <input type="number" id="timer-min" value="2" min="0">
+        <label>Δευτ:</label>
+        <input type="number" id="timer-sec" value="0" min="0" max="59">
+      </div>
+      <div class="timer-display" id="timer-display">02:00</div>
+      <div class="btn-row no-print" style="justify-content:center; gap:0.5rem;">
+        <button class="small" onclick="startTimer()">Έναρξη</button>
+        <button class="small secondary" onclick="pauseTimer()">Παύση</button>
+        <button class="small secondary" onclick="resetTimer()">Μηδενισμός</button>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.4rem;">Κριτήρια Αξιολόγησης (1–4)</h3>
+    <p class="hint small">
+      Οι κριτές βαθμολογούν κάθε ομάδα από 1 (πολύ αδύναμο) έως 4 (εξαιρετικό).
+      Μπορείτε να χρησιμοποιήσετε το rubric και ως οδηγό για feedback.
+    </p>
+
+    <div class="rubric-table">
+      <div class="rubric-row rubric-header">
+        <div>Κριτήριο</div>
+        <div class="rubric-col-label team-a">Ομάδα Α – Οικονομία</div>
+        <div class="rubric-col-label team-b">Ομάδα Β – Περιβάλλον</div>
+      </div>
+
+      <div class="rubric-row">
+        <div>Χρήση του κειμένου της Κενγκά (παραδείγματα, εικόνες, φράσεις)</div>
+        <div><input type="number" class="rubric-input" id="rub-a-1" min="1" max="4"></div>
+        <div><input type="number" class="rubric-input" id="rub-b-1" min="1" max="4"></div>
+      </div>
+
+      <div class="rubric-row">
+        <div>Πειστικότητα επιχειρημάτων (λογική, αιτιολόγηση, παραδείγματα)</div>
+        <div><input type="number" class="rubric-input" id="rub-a-2" min="1" max="4"></div>
+        <div><input type="number" class="rubric-input" id="rub-b-2" min="1" max="4"></div>
+      </div>
+
+      <div class="rubric-row">
+        <div>Οργάνωση λόγου & σαφήνεια (δομή, κατανοητό μήνυμα)</div>
+        <div><input type="number" class="rubric-input" id="rub-a-3" min="1" max="4"></div>
+        <div><input type="number" class="rubric-input" id="rub-b-3" min="1" max="4"></div>
+      </div>
+
+      <div class="rubric-row">
+        <div>Σεβασμός & συνεργασία (τρόπος διαφωνίας, ακρόαση των άλλων)</div>
+        <div><input type="number" class="rubric-input" id="rub-a-4" min="1" max="4"></div>
+        <div><input type="number" class="rubric-input" id="rub-b-4" min="1" max="4"></div>
+      </div>
+    </div>
+
+    <div id="rubric-result" style="margin-top:0.5rem; font-weight:bold; color:var(--accent);"></div>
+    <button class="small secondary no-print" onclick="calcRubric()">Υπολογισμός Βαθμολογίας</button>
+
+    <h3 style="margin-top:1.4rem;">Τελική Ψηφοφορία</h3>
+    <p class="hint">
+      Μετά το debate, γράψτε ξανά πόσοι μαθητές στηρίζουν κάθε πλευρά. Συγκρίνετε με την αρχική ψηφοφορία.
+      Οι κριτές μπορούν να σχολιάσουν αν και πώς άλλαξε η γνώμη της τάξης.
+    </p>
+
+    <div class="vote-inputs">
+      <div class="vote-box">
+        <strong>Μεγάλες εταιρείες & πλοιοκτήτες</strong>
+        <input type="number" id="post-a" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Κράτος & νόμοι</strong>
+        <input type="number" id="post-b" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Όλοι μας / Καταναλωτές</strong>
+        <input type="number" id="post-c" min="0" value="0">
+      </div>
+    </div>
+
+    <button class="small no-print" onclick="calcPostVote()">Υπολογισμός & Γράφημα</button>
+    <div id="post-results" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+    <div id="post-chart" class="bar-chart"></div>
+
+    <h3 style="margin-top:1.1rem;">Συλλογικό Συμπέρασμα</h3>
+    <p class="hint small">
+      Οι κριτές μπορούν να διαβάσουν ή να υπαγορεύσουν στην τάξη το τελικό συμπέρασμα,
+      συνδυάζοντας τις πιο δυνατές ιδέες και από τις δύο πλευρές.
+    </p>
+    <textarea id="conclusion-text"
+      placeholder="Γράψτε εδώ την τελική απόφαση της τάξης σας: τι μάθατε από την ιστορία της Κενγκά; ποιο είναι το δίκαιο για τη θάλασσα και τους ανθρώπους;"></textarea>
+
+    <div class="btn-row no-print">
+      <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
+      <!-- ΝΕΟ: εκτύπωση σύνοψης με δεδομένα -->
+      <button onclick="printSummary()">🖨️ Εκτύπωση / PDF</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  ✨✍️ Δημιουργία: Παναγιώτης Δόμβρος, Εκπαιδευτικός Αγγλικών-Θεατρολόγος, Με την Επιφύλαξη Παντός Δικαιώματος ✍️✨
+</footer>
+
+<script>
+  /* --- Navigation --- */
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const indicator = document.getElementById('stepIndicator');
+  let currentStep = 0;
+
+  function initDots() {
+    indicator.innerHTML = '';
+    steps.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'step-dot' + (i === 0 ? ' active' : '');
+      indicator.appendChild(dot);
+    });
+  }
+
+  function showStep(n) {
+    if (n < 0 || n >= steps.length) return;
+    steps.forEach((s, i) => {
+      s.classList.toggle('active', i === n);
+      indicator.children[i].classList.toggle('active', i === n);
+    });
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nextStep() {
+    showStep(currentStep + 1);
+  }
+
+  function prevStep() {
+    showStep(currentStep - 1);
+  }
+
+  /* --- Voting helpers --- */
+  function makeBar(label, pct, color) {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML =
+      `<span class="bar-label">${label}</span>
+       <div class="bar-track">
+         <div class="bar-fill" style="width:${pct}%; background:${color};"></div>
+       </div>
+       <span style="min-width:40px">${pct}%</span>`;
+    return row;
+  }
+
+  function getVoteSummary(prefix) {
+    const a = parseInt(document.getElementById(prefix + '-a').value) || 0;
+    const b = parseInt(document.getElementById(prefix + '-b').value) || 0;
+    const c = parseInt(document.getElementById(prefix + '-c').value) || 0;
+    const total = a + b + c;
+
+    if (!total) {
+      return {
+        total: 0, a, b, c,
+        pa: 0, pb: 0, pc: 0
+      };
+    }
+
+    const pa = ((a / total) * 100).toFixed(1);
+    const pb = ((b / total) * 100).toFixed(1);
+    const pc = ((c / total) * 100).toFixed(1);
+
+    return { total, a, b, c, pa, pb, pc };
+  }
+
+  function calcVote(prefix) {
+    const data = getVoteSummary(prefix);
+    const res = document.getElementById(prefix + '-results');
+    const chart = document.getElementById(prefix + '-chart');
+    chart.innerHTML = '';
+
+    if (!data.total) {
+      res.innerText = 'Δεν υπάρχουν ψήφοι.';
+      return;
+    }
+
+    res.innerHTML =
+      `Σύνολο: <strong>${data.total}</strong>. ` +
+      `Εταιρείες/Πλοιοκτήτες: ${data.a} (${data.pa}%), ` +
+      `Κράτος/Νόμοι: ${data.b} (${data.pb}%), ` +
+      `Όλοι μας: ${data.c} (${data.pc}%).`;
+
+    chart.appendChild(makeBar('Εταιρείες/Πλοιοκτήτες', data.pa, 'var(--accent)'));
+    chart.appendChild(makeBar('Κράτος/Νόμοι', data.pb, 'var(--accent-alt)'));
+    chart.appendChild(makeBar('Όλοι μας', data.pc, '#8e24aa'));
+  }
+
+  function calcPreVote() {
+    calcVote('pre');
+  }
+
+  function calcPostVote() {
+    calcVote('post');
+  }
+
+  /* --- Timer --- */
+  let timerInterval = null;
+
+  function updateTimerDisplay(totalSec) {
+    const display = document.getElementById('timer-display');
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    const mm = String(min).padStart(2, '0');
+    const ss = String(sec).padStart(2, '0');
+    display.textContent = `${mm}:${ss}`;
+  }
+
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    let min = parseInt(document.getElementById('timer-min').value) || 0;
+    let sec = parseInt(document.getElementById('timer-sec').value) || 0;
+    let totalSec = min * 60 + sec;
+    updateTimerDisplay(totalSec);
+
+    timerInterval = setInterval(() => {
+      totalSec--;
+      if (totalSec <= 0) {
+        totalSec = 0;
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      updateTimerDisplay(totalSec);
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function resetTimer() {
+    pauseTimer();
+    const min = parseInt(document.getElementById('timer-min').value) || 0;
+    const sec = parseInt(document.getElementById('timer-sec').value) || 0;
+    const totalSec = min * 60 + sec;
+    updateTimerDisplay(totalSec);
+  }
+
+  /* --- Argument organiser --- */
+  function createArgItem(side, index) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'arg-item';
+
+    const num = index + 1;
+    wrapper.innerHTML = `
+      <div class="arg-item-label">Επιχείρημα ${num}</div>
+      <div class="arg-item-sub">
+        1) Γράψε πρώτα τη βασική ιδέα σου (θέση).<br>
+        2) Μετά εξήγησε <em>γιατί</em> είναι σημαντική.<br>
+        3) Τέλος, δώσε ένα μικρό παράδειγμα.
+      </div>
+      <label class="arg-item-sub">Θέση (τι υποστηρίζουμε):</label>
+      <textarea placeholder="${side === 'A'
+        ? 'π.χ. Τα πλοία με πετρέλαιο είναι απαραίτητα για να φτάνουν προϊόντα σε όλο τον κόσμο.'
+        : 'π.χ. Η θάλασσα και τα ζώα δεν πρέπει να θυσιάζονται για τα κέρδη των εταιρειών.'}"></textarea>
+      <label class="arg-item-sub">Γιατί; (αιτιολόγηση):</label>
+      <textarea placeholder="Εξηγώ γιατί αυτό που λέω είναι σημαντικό ή δίκαιο."></textarea>
+      <label class="arg-item-sub">Παράδειγμα:</label>
+      <textarea placeholder="${side === 'A'
+        ? 'π.χ. Αν σταματήσουν τα πλοία, πολλά προϊόντα (τρόφιμα, φάρμακα) δεν θα φτάνουν στην ώρα τους.'
+        : 'π.χ. Όταν υπάρχει πετρελαιοκηλίδα, όπως στο κείμενο με την Κενγκά, πολλά ζώα πεθαίνουν αργά και βασανιστικά.'}"></textarea>
+    `;
+    return wrapper;
+  }
+
+  function addArgument(side) {
+    const containerId = side === 'A' ? 'argsA' : 'argsB';
+    const container = document.getElementById(containerId);
+    const index = container.children.length;
+    container.appendChild(createArgItem(side, index));
+  }
+
+  function initArguments() {
+    // αρχικά 2 επιχειρήματα σε κάθε πλευρά
+    addArgument('A');
+    addArgument('A');
+    addArgument('B');
+    addArgument('B');
+  }
+
+  /* --- Rubric --- */
+  function calcRubric() {
+    let aTotal = 0, bTotal = 0;
+    for (let i = 1; i <= 4; i++) {
+      aTotal += parseInt(document.getElementById(`rub-a-${i}`).value) || 0;
+      bTotal += parseInt(document.getElementById(`rub-b-${i}`).value) || 0;
+    }
+    const result = document.getElementById('rubric-result');
+    result.textContent =
+      `Σύνολο: Ομάδα Α ${aTotal}/16 – Ομάδα Β ${bTotal}/16`;
+  }
+
+  function getRubricData() {
+    const labels = [
+      'Χρήση του κειμένου της Κενγκά (παραδείγματα, εικόνες, φράσεις)',
+      'Πειστικότητα επιχειρημάτων (λογική, αιτιολόγηση, παραδείγματα)',
+      'Οργάνωση λόγου & σαφήνεια (δομή, κατανοητό μήνυμα)',
+      'Σεβασμός & συνεργασία (τρόπος διαφωνίας, ακρόαση των άλλων)'
+    ];
+    let aTotal = 0, bTotal = 0;
+    const rows = [];
+
+    for (let i = 1; i <= 4; i++) {
+      const aVal = parseInt(document.getElementById(`rub-a-${i}`).value) || 0;
+      const bVal = parseInt(document.getElementById(`rub-b-${i}`).value) || 0;
+      aTotal += aVal;
+      bTotal += bVal;
+      rows.push({ label: labels[i - 1], a: aVal, b: bVal });
+    }
+
+    return { rows, aTotal, bTotal };
+  }
+
+  /* --- Helpers για "καθαρές" εκτυπώσεις --- */
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function (ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch] || ch);
+    });
+  }
+
+  function formatMultiline(str) {
+    return escapeHtml(str).replace(/\n/g, '<br>');
+  }
+
+  function getMeta() {
+    const group = (document.getElementById('meta-group').value || '---').trim() || '---';
+    const cls = (document.getElementById('meta-class').value || '---').trim() || '---';
+    const date = document.getElementById('meta-date').value || '----';
+    return `<p><strong>Ομάδα:</strong> ${escapeHtml(group)} | <strong>Τάξη:</strong> ${escapeHtml(cls)} | <strong>Ημερομηνία:</strong> ${escapeHtml(date)}</p><hr>`;
+  }
+
+  function getArgsForPrint(side) {
+    const containerId = side === 'A' ? 'argsA' : 'argsB';
+    const items = document.querySelectorAll(`#${containerId} .arg-item`);
+    let html = '<ol>';
+    let count = 0;
+
+    items.forEach(item => {
+      const areas = item.querySelectorAll('textarea');
+      if (!areas.length) return;
+      const pos = areas[0].value.trim();
+      const why = areas[1].value.trim();
+      const ex = areas[2].value.trim();
+      if (!pos && !why && !ex) return;
+
+      count++;
+      html += '<li>';
+      if (pos) html += '<strong>Θέση:</strong> ' + formatMultiline(pos) + '<br>';
+      if (why) html += '<em>Γιατί:</em> ' + formatMultiline(why) + '<br>';
+      if (ex) html += '<em>Παράδειγμα:</em> ' + formatMultiline(ex) + '<br>';
+      html += '</li>';
+    });
+
+    if (!count) {
+      return '<p><em>Δεν έχουν συμπληρωθεί επιχειρήματα.</em></p>';
+    }
+    html += '</ol>';
+    return html;
+  }
+
+  function printArguments() {
+    const win = window.open('', '_blank');
+    if (!win) return;
+    const doc = win.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html lang="el"><head><meta charset="UTF-8"><title>Επιχειρήματα – Το μαύρο κύμα</title>');
+    doc.write('<style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:20px;line-height:1.6;} h1{font-size:1.4rem;margin-bottom:.2rem;} h2{font-size:1.1rem;margin-top:1rem;} hr{margin:0.5rem 0 1rem;} ol{padding-left:1.2rem;} li{margin-bottom:0.4rem;}</style>');
+    doc.write('</head><body>');
+    doc.write('<h1>Επιχειρήματα – Το μαύρο κύμα</h1>');
+    doc.write(getMeta());
+    doc.write('<h2>Ομάδα Α – Οικονομία &amp; Μεταφορές</h2>');
+    doc.write(getArgsForPrint('A'));
+    doc.write('<h2>Ομάδα Β – Περιβάλλον &amp; Θαλάσσια Ζωή</h2>');
+    doc.write(getArgsForPrint('B'));
+    const concEl = document.getElementById('conclusion-text');
+    const conc = concEl ? concEl.value.trim() : '';
+    if (conc) {
+      doc.write('<h2>Συλλογικό συμπέρασμα</h2><p>' + formatMultiline(conc) + '</p>');
+    }
+    doc.write('</body></html>');
+    doc.close();
+    win.focus();
+    win.print();
+  }
+
+  function printScenarios() {
+    const win = window.open('', '_blank');
+    if (!win) return;
+    const doc = win.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html lang="el"><head><meta charset="UTF-8"><title>Σενάρια – Το μαύρο κύμα</title>');
+    doc.write('<style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:20px;line-height:1.6;} h1{font-size:1.4rem;margin-bottom:.2rem;} h2{font-size:1.1rem;margin-top:1rem;} h3{font-size:1rem;margin-top:.6rem;} hr{margin:0.5rem 0 1rem;} .scenario-block{margin-bottom:1.2rem;}</style>');
+    doc.write('</head><body>');
+    doc.write('<h1>Σύγχρονα σενάρια – Το μαύρο κύμα</h1>');
+    doc.write(getMeta());
+
+    const scenarios = document.querySelectorAll('details.scenario');
+    scenarios.forEach((sc, idx) => {
+      const title = sc.querySelector('summary')?.innerText || `Σενάριο ${idx + 1}`;
+      const descP = sc.querySelector('p')?.innerText || '';
+      const textareas = sc.querySelectorAll('textarea');
+      const aText = textareas[0]?.value.trim() || '';
+      const bText = textareas[1]?.value.trim() || '';
+
+      doc.write('<div class="scenario-block">');
+      doc.write('<h2>' + escapeHtml(title) + '</h2>');
+      if (descP) doc.write('<p>' + formatMultiline(descP) + '</p>');
+
+      doc.write('<h3>Σημειώσεις Ομάδας Α</h3>');
+      if (aText) {
+        doc.write('<p>' + formatMultiline(aText) + '</p>');
+      } else {
+        doc.write('<p><em>Δεν υπάρχουν σημειώσεις.</em></p>');
+      }
+
+      doc.write('<h3>Σημειώσεις Ομάδας Β</h3>');
+      if (bText) {
+        doc.write('<p>' + formatMultiline(bText) + '</p>');
+      } else {
+        doc.write('<p><em>Δεν υπάρχουν σημειώσεις.</em></p>');
+      }
+
+      doc.write('</div>');
+    });
+
+    doc.write('</body></html>');
+    doc.close();
+    win.focus();
+    win.print();
+  }
+
+  /* --- Σύνοψη για Βήμα 10 --- */
+  function printSummary() {
+    const pre = getVoteSummary('pre');
+    const post = getVoteSummary('post');
+    const rubric = getRubricData();
+    const concEl = document.getElementById('conclusion-text');
+    const conc = concEl ? concEl.value.trim() : '';
+
+    const win = window.open('', '_blank');
+    if (!win) return;
+    const doc = win.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html lang="el"><head><meta charset="UTF-8"><title>Σύνοψη Debate – Το μαύρο κύμα</title>');
+    doc.write('<style>');
+    doc.write('body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:20px;line-height:1.6;}');
+    doc.write('h1{font-size:1.4rem;margin-bottom:.2rem;} h2{font-size:1.1rem;margin-top:1rem;} table{border-collapse:collapse;width:100%;margin-top:0.4rem;} th,td{border:1px solid #ccc;padding:4px 6px;font-size:0.9rem;text-align:center;} th{text-align:center;background:#f5f5f5;} .left{text-align:left;} hr{margin:0.5rem 0 1rem;}');
+    doc.write('</style></head><body>');
+
+    doc.write('<h1>Σύνοψη Debate – Το μαύρο κύμα</h1>');
+    doc.write(getMeta());
+
+    // Αρχική ψηφοφορία
+    doc.write('<h2>Αρχική ψηφοφορία</h2>');
+    if (!pre.total) {
+      doc.write('<p><em>Δεν έχουν καταγραφεί ψήφοι.</em></p>');
+    } else {
+      doc.write('<p>Σύνολο ψήφων: <strong>' + pre.total + '</strong></p>');
+      doc.write('<table><tr><th class="left">Κατηγορία</th><th>Ψήφοι</th><th>%</th></tr>');
+      doc.write('<tr><td class="left">Εταιρείες/Πλοιοκτήτες</td><td>' + pre.a + '</td><td>' + pre.pa + '%</td></tr>');
+      doc.write('<tr><td class="left">Κράτος/Νόμοι</td><td>' + pre.b + '</td><td>' + pre.pb + '%</td></tr>');
+      doc.write('<tr><td class="left">Όλοι μας/Καταναλωτές</td><td>' + pre.c + '</td><td>' + pre.pc + '%</td></tr>');
+      doc.write('</table>');
+    }
+
+    // Τελική ψηφοφορία
+    doc.write('<h2>Τελική ψηφοφορία</h2>');
+    if (!post.total) {
+      doc.write('<p><em>Δεν έχουν καταγραφεί ψήφοι.</em></p>');
+    } else {
+      doc.write('<p>Σύνολο ψήφων: <strong>' + post.total + '</strong></p>');
+      doc.write('<table><tr><th class="left">Κατηγορία</th><th>Ψήφοι</th><th>%</th></tr>');
+      doc.write('<tr><td class="left">Εταιρείες/Πλοιοκτήτες</td><td>' + post.a + '</td><td>' + post.pa + '%</td></tr>');
+      doc.write('<tr><td class="left">Κράτος/Νόμοι</td><td>' + post.b + '</td><td>' + post.pb + '%</td></tr>');
+      doc.write('<tr><td class="left">Όλοι μας/Καταναλωτές</td><td>' + post.c + '</td><td>' + post.pc + '%</td></tr>');
+      doc.write('</table>');
+    }
+
+    // Rubric κριτών
+    doc.write('<h2>Βαθμολόγηση κριτών (Rubric)</h2>');
+    doc.write('<p>Μέγιστο σύνολο ανά ομάδα: 16 βαθμοί.</p>');
+    doc.write('<table><tr><th class="left">Κριτήριο</th><th>Ομάδα Α</th><th>Ομάδα Β</th></tr>');
+    rubric.rows.forEach(row => {
+      doc.write('<tr><td class="left">' + escapeHtml(row.label) + '</td><td>' + row.a + '</td><td>' + row.b + '</td></tr>');
+    });
+    doc.write('<tr><th class="left">Σύνολο</th><th>' + rubric.aTotal + '/16</th><th>' + rubric.bTotal + '/16</th></tr>');
+    doc.write('</table>');
+
+    // Συλλογικό συμπέρασμα
+    doc.write('<h2>Συλλογικό συμπέρασμα</h2>');
+    if (conc) {
+      doc.write('<p>' + formatMultiline(conc) + '</p>');
+    } else {
+      doc.write('<p><em>Δεν έχει συμπληρωθεί συμπέρασμα.</em></p>');
+    }
+
+    doc.write('</body></html>');
+    doc.close();
+    win.focus();
+    win.print();
+  }
+
+  /* --- Meta summary (για την εκτύπωση στο header) --- */
+  function updateMetaSummary() {
+    const group = (document.getElementById('meta-group').value || '').trim() || '__________';
+    const cls = (document.getElementById('meta-class').value || '').trim() || '__________';
+    const date = document.getElementById('meta-date').value || '____-__-__';
+
+    document.getElementById('meta-summary-group').textContent = group;
+    document.getElementById('meta-summary-class').textContent = cls;
+    document.getElementById('meta-summary-date').textContent = date;
+  }
+
+  function initMetaSummary() {
+    const groupInput = document.getElementById('meta-group');
+    const classInput = document.getElementById('meta-class');
+    const dateInput = document.getElementById('meta-date');
+
+    [groupInput, classInput, dateInput].forEach(el => {
+      if (el) el.addEventListener('input', updateMetaSummary);
+    });
+
+    updateMetaSummary();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initDots();
+    resetTimer();
+    initArguments();
+    initMetaSummary();
+  });
+</script>
+
+</body>
+</html>
