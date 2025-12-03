@@ -26,8 +26,54 @@
       margin: 0;
       background: var(--bg);
       color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
+    /* --- COVER PAGE STYLES --- */
+    /* Only visible when on the cover step */
+    .step.cover-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh; /* Adjust height to fit between header/footer */
+      text-align: center;
+      padding: 1rem;
+    }
+    
+    .step.cover-view.active {
+      display: flex;
+    }
+
+    .cover-main-image {
+      max-height: 65vh; /* Fits nicely on laptop screens */
+      max-width: 100%;
+      width: auto;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      margin-bottom: 2rem;
+      display: block;
+    }
+
+    .cover-btn {
+      font-size: 1.2rem; 
+      padding: 0.8rem 2.5rem; 
+      box-shadow: 0 4px 14px rgba(0, 137, 123, 0.4);
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .cover-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* --- APP STYLES --- */
     header {
       background: #ffffff;
       padding: 0.8rem 1.5rem 0.9rem;
@@ -36,6 +82,7 @@
       top: 0;
       z-index: 10;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .header-inner {
@@ -102,6 +149,7 @@
       border-radius: 50%;
       border: 2px solid var(--accent);
       background: transparent;
+      cursor: pointer; /* Clickable dots */
     }
 
     .step-dot.active {
@@ -112,6 +160,8 @@
       max-width: 900px;
       margin: 1.5rem auto 2.5rem;
       padding: 0 1rem;
+      flex-grow: 1; /* Pushes footer down */
+      width: 100%;
     }
 
     .card {
@@ -150,7 +200,7 @@
       margin-bottom: 0.25rem;
     }
 
-    .cover-image {
+    .story-image {
       width: 100%;
       border-radius: 14px;
       margin: 0.8rem 0;
@@ -573,6 +623,7 @@
       color: var(--text-muted);
       border-top: 1px solid #e0e0e0;
       background: #ffffff;
+      flex-shrink: 0;
     }
 
     .no-print {}
@@ -622,6 +673,8 @@
       .step {
         display: block !important;
       }
+      /* Hide cover image in print */
+      .cover-view { display: none !important; }
     }
   </style>
 </head>
@@ -638,7 +691,6 @@
       </div>
     </div>
 
-    <!-- Εμφανίζεται μόνο στην εκτύπωση -->
     <div class="meta-summary">
       <span><strong>Ομάδα:</strong> <span id="meta-summary-group">__________</span></span>
       <span><strong>Τάξη:</strong> <span id="meta-summary-class">__________</span></span>
@@ -650,8 +702,14 @@
 </header>
 
 <main>
-  <!-- Βήμα 1: Στοιχεία Ομάδας -->
-  <section class="card step active">
+  <section class="step cover-view active">
+    <img src="Το Μαύρο Κύμα.png" alt="Το Μαύρο Κύμα - Infographic" class="cover-main-image">
+    <div>
+      <button type="button" class="cover-btn" onclick="enterApp()">Είσοδος στο Debate</button>
+    </div>
+  </section>
+
+  <section class="card step">
     <h2>Βήμα 1: Στοιχεία Ομάδας</h2>
     <p class="hint">
       Συμπληρώστε τα στοιχεία της ομάδας σας πριν ξεκινήσετε το debate. Στην εκτύπωση θα εμφανιστούν
@@ -679,12 +737,11 @@
     </div>
   </section>
 
-  <!-- Βήμα 2: Δίλημμα -->
   <section class="card step">
     <h2>Βήμα 2: Το Δίλημμα της Ρύπανσης</h2>
 
     <div style="text-align:center;">
-      <img src="kenga.png" alt="Η Κενγκά στο μαύρο κύμα" class="cover-image">
+      <img src="kenga.png" alt="Η Κενγκά στο μαύρο κύμα" class="story-image">
     </div>
 
     <h3 class="center-question">Ποιος φταίει περισσότερο για το «μαύρο κύμα» στη θάλασσα;</h3>
@@ -704,7 +761,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 3: Κείμενο – Μέρος Α -->
   <section class="card step">
     <h2>Βήμα 3: Το κείμενο – Μέρος Α</h2>
     <p class="hint">
@@ -787,7 +843,7 @@
 
     <p class="story-text">
       Μπροστά στην εφιαλτική προοπτική ενός αργού θανάτου, κούνησε το σώμα της και διαπίστωσε με έκπληξη
-      πως το πετρέλαιο δεν είχε πειράξει τις φτερούγες ως τη ρίζα τους. Μπορεί τα πούπουλά τους να ’χαν
+      πως το πετρέλαιο δεν είχε πειράξει τις φτερούγες ως τη ρίζα τους. Μπορεί τα πούπουλα τους να ’χαν
       ποτίσει απ’ αυτή την
       <span class="glossary-word" data-def="Πολύ πυκνή και παχιά ουσία που ρέει δύσκολα, όχι σαν νερό.">παχύρρευστη</span>
       ουσία, τουλάχιστον, όμως, μπορούσε να τις ανοίξει.
@@ -799,7 +855,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 4: Κείμενο – Μέρος Β -->
   <section class="card step">
     <h2>Βήμα 4: Το κείμενο – Μέρος Β</h2>
     <p class="hint">
@@ -888,7 +943,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 5: Η Σύγκρουση -->
   <section class="card step">
     <h2>Βήμα 5: Η Σύγκρουση</h2>
     <p class="hint">
@@ -928,7 +982,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 6: Αρχική Ψηφοφορία -->
   <section class="card step">
     <h2>Βήμα 6: Αρχική Ψηφοφορία</h2>
     <p class="hint">
@@ -964,7 +1017,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 7: Ομάδες & Ρόλοι (με κριτές) -->
   <section class="card step">
     <h2>Βήμα 7: Ομάδες & Ρόλοι</h2>
     <p class="hint">
@@ -1022,7 +1074,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 8: Οργάνωση Επιχειρημάτων & Φράσεις -->
   <section class="card step">
     <h2>Βήμα 8: Οργάνωση Επιχειρημάτων & Τράπεζα Φράσεων</h2>
     <p class="hint">
@@ -1039,8 +1090,7 @@
           Μην ξεχνάτε όμως να απαντάτε και στην κριτική της άλλης πλευράς.
         </p>
         <div id="argsA" class="arg-list">
-          <!-- γεμίζει με JS -->
-        </div>
+          </div>
         <button type="button" class="small secondary arg-add-btn no-print" onclick="addArgument('A')">
           + Νέο επιχείρημα (Ομάδα Α)
         </button>
@@ -1053,8 +1103,7 @@
           από το κέρδος. Χρησιμοποιήστε εικόνες από την ιστορία της Κενγκά.
         </p>
         <div id="argsB" class="arg-list">
-          <!-- γεμίζει με JS -->
-        </div>
+          </div>
         <button type="button" class="small secondary arg-add-btn no-print" onclick="addArgument('B')">
           + Νέο επιχείρημα (Ομάδα Β)
         </button>
@@ -1120,7 +1169,6 @@
       </div>
     </div>
 
-    <!-- Εκτύπωση επιχειρημάτων -->
     <div class="btn-row no-print" style="margin-top:1rem;">
       <button class="small secondary" onclick="printArguments()">🖨️ Εκτύπωση Επιχειρημάτων</button>
     </div>
@@ -1131,7 +1179,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 9: Σύγχρονα Σενάρια -->
   <section class="card step">
     <h2>Βήμα 9: Σύγχρονα Σενάρια</h2>
     <p class="hint">
@@ -1175,7 +1222,6 @@
       </div>
     </details>
 
-    <!-- Εκτύπωση σεναρίων -->
     <div class="btn-row no-print" style="margin-top:1rem;">
       <button class="small secondary" onclick="printScenarios()">🖨️ Εκτύπωση Σεναρίων</button>
     </div>
@@ -1186,7 +1232,6 @@
     </div>
   </section>
 
-  <!-- Βήμα 10: Debate, Χρονόμετρο, Rubric & Τελική Ψηφοφορία -->
   <section class="card step">
     <h2>Βήμα 10: Debate, Χρονόμετρο, Rubric & Τελική Ψηφοφορία</h2>
 
@@ -1282,7 +1327,6 @@
 
     <div class="btn-row no-print">
       <button class="secondary" onclick="prevStep()">⟵ Πίσω</button>
-      <!-- ΝΕΟ: εκτύπωση σύνοψης με δεδομένα -->
       <button onclick="printSummary()">🖨️ Εκτύπωση / PDF</button>
     </div>
   </section>
@@ -1300,21 +1344,40 @@
 
   function initDots() {
     indicator.innerHTML = '';
-    steps.forEach((_, i) => {
-      const dot = document.createElement('div');
-      dot.className = 'step-dot' + (i === 0 ? ' active' : '');
-      indicator.appendChild(dot);
+    // Create dots starting from step 1 (skipping cover page index 0 if we want dots only for content)
+    // Here we create dots for steps 1 to N
+    for(let i=1; i<steps.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'step-dot';
+        indicator.appendChild(dot);
+    }
+  }
+
+  function updateDots() {
+    if(currentStep === 0) return; // No dots on cover
+    
+    const dots = Array.from(indicator.children);
+    dots.forEach((d, i) => {
+       // i corresponds to step index i+1
+       d.classList.toggle('active', i === (currentStep - 1)); 
     });
   }
 
   function showStep(n) {
     if (n < 0 || n >= steps.length) return;
+    
+    // Toggle active class on steps
     steps.forEach((s, i) => {
       s.classList.toggle('active', i === n);
-      indicator.children[i].classList.toggle('active', i === n);
     });
+
     currentStep = n;
+    updateDots();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function enterApp() {
+      showStep(1);
   }
 
   function nextStep() {
@@ -1726,6 +1789,8 @@
     resetTimer();
     initArguments();
     initMetaSummary();
+    // Initially show step 0 (cover page)
+    showStep(0);
   });
 </script>
 
